@@ -3,13 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Physical Constants
-mu = 3.986004418e14 						# [m**3/s**2] gravitational parameter of the Earth
+MU = 3.986004418e14 						# [m**3/s**2] Gravitational parameter of the Earth
 J2 = 1082.62668e-6 							# Perturbation constant from gravitational potential
-Re = 6378.137e3 							# [m] equatorial radius of the Earth
-Rp = 6356.752e3 							# [m] polar radius of the Earth
-day_seconds = 86400 						# [s] seconds in a solar day
-sidday_seconds = 86164 						# [s] seconds in a sidereal day
-g0 = 9.80665								# [m/s2] Intensity of gravity at mean sea level
+RE = 6378.137e3 							# [m] Equatorial radius of the Earth
+DAY_SECONDS = 86400 						# [s] Seconds in a solar day
 
 def Rot(a):
 	c = np.cos(a)
@@ -34,15 +31,15 @@ def Mult4(a, b, c, d):
 # Acceleration function
 def accelerations(pos, vel):
 	pos_norm = np.linalg.norm(pos)
-	rddot2B = - mu * pos / pos_norm**3
-	#rddotJ2 =  TO DO acceleration du J2
-	xdd = - mu/pos_norm**2*(Re/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-3/2)*pos[0]/pos_norm
-	ydd = - mu/pos_norm**2*(Re/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-3/2)*pos[1]/pos_norm
-	zdd = - mu/pos_norm**2*(Re/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-9/2)*pos[2]/pos_norm
-	rddotJ2 = [xdd, ydd, zdd]
+	rddot2B = - MU * pos / pos_norm**3
+
+	rddotJ2 = [- MU/pos_norm**2*(RE/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-3/2)*pos[0]/pos_norm, 
+			- MU/pos_norm**2*(RE/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-3/2)*pos[1]/pos_norm, 
+			- MU/pos_norm**2*(RE/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-9/2)*pos[2]/pos_norm]
+	
 	acc = rddot2B + rddotJ2
 	
-	jerk = - mu * (vel/pos_norm**3 - 3*pos*np.dot(pos, vel)/pos_norm**5)
+	jerk = - MU * (vel/pos_norm**3 - 3*pos*np.dot(pos, vel)/pos_norm**5)
 	return acc, jerk
 
 def radius(a, ecc, nu):
@@ -52,7 +49,7 @@ def kepler2state(a, e, i, Omega, omega, nu):
 	rc = radius(a, e, nu)
 	E = 2*m.atan2(m.tan(nu/2), m.sqrt((1+e)/(1-e)))
 	o = rc*np.array([m.cos(nu), m.sin(nu), 0])
-	odot = m.sqrt(mu*a)/rc*np.array([-m.sin(E), m.sqrt(1-e**2)*m.cos(E), 0])
+	odot = m.sqrt(MU*a)/rc*np.array([-m.sin(E), m.sqrt(1-e**2)*m.cos(E), 0])
 	r = Mult4(Rot(Omega)[2], Rot(i)[0], Rot(omega)[2], o)
 	rdot = Mult4(Rot(Omega)[2], Rot(i)[0], Rot(omega)[2], odot)
 	return r, rdot
@@ -60,8 +57,8 @@ def kepler2state(a, e, i, Omega, omega, nu):
 # Initial conditions
 def tle2kepler(TLE):
     tle2 = TLE[1].split(' ')
-    T = day_seconds/float(tle2[7])
-    a = (mu*(T/(2*m.pi))**2)**(1/3)
+    T = DAY_SECONDS/float(tle2[7])
+    a = (MU*(T/(2*m.pi))**2)**(1/3)
 	
     e = float(str(0.) + tle2[4])
     i = float(tle2[2]) * m.pi/180
@@ -79,7 +76,7 @@ r, rdot = kepler2state(a, e, i, Omega, omega, nu)
 rddot, jerk = accelerations(r, rdot)
 
 # Simulation parameters
-time = day_seconds*1  # total time
+time = DAY_SECONDS*5  # total time
 dt = 10    # time step
 
 # Initialize arrays to store position and velocity
@@ -105,15 +102,15 @@ fig2 = plt.figure()
 plt.title("Orbit in ECI")
 
 # Creating a wireframe for the Earth
-phi = np.linspace(0, 2 * m.pi, 360)
-theta = np.linspace(0, m.pi, 180)
+phi = np.linspace(0, 2 * m.pi, 36)
+theta = np.linspace(0, m.pi, 18)
 A, B = np.meshgrid(theta, phi)
-X = Re * np.sin(A) * np.cos(B)  # X coordinates
-Y = Re * np.sin(A) * np.sin(B)  # Y coordinates
-Z = Re * np.cos(A)              # Z coordinates
+X = RE * np.sin(A) * np.cos(B)  # X coordinates
+Y = RE * np.sin(A) * np.sin(B)  # Y coordinates
+Z = RE * np.cos(A)              # Z coordinates
 
 # Plotting the Earth and the trajectory
-eci = fig2.add_subplot(111, projection='3d')
-eci.plot_wireframe(X, Y, Z, color='c', zorder=1, alpha=0.25)  # Sphere
-eci.plot3D(r_array[:, 0], r_array[:, 1], r_array[:, 2], color='m')  # Trajectory
+eci = fig2.add_subplot(111, projection = '3d')
+eci.plot_wireframe(X, Y, Z, color = 'c', zorder = 1, alpha = 0.25)  # Sphere
+eci.plot3D(r_array[:, 0], r_array[:, 1], r_array[:, 2], color = 'm')  # Trajectory
 plt.show()
