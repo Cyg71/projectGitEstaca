@@ -9,6 +9,10 @@ RE = 6378.137e3 							# [m] Equatorial radius of the Earth
 DAY_SECONDS = 86400 						# [s] Seconds in a solar day
 
 def Rot(a):
+	"""
+	a: angle [rad]
+	Rot: matrix 3x3
+	"""
 	c = np.cos(a)
 	s = np.sin(a)
 	Rotx = np.array([[1, 0, 0], 
@@ -25,17 +29,14 @@ def Rot(a):
 
 	return Rotx, Roty, Rotz
 
-def Mult4(a, b, c, d):
-	return np.matmul(a, np.matmul(b, np.matmul(c, d)))
-
 # Acceleration function
 def accelerations(pos, vel):
 	pos_norm = np.linalg.norm(pos)
 	rddot2B = - MU * pos / pos_norm**3
 
-	rddotJ2 = [- MU/pos_norm**2*(RE/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-3/2)*pos[0]/pos_norm, 
-			- MU/pos_norm**2*(RE/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-3/2)*pos[1]/pos_norm, 
-			- MU/pos_norm**2*(RE/pos_norm)**2*(-J2)*(15/2*(pos[2]/pos_norm)**2-9/2)*pos[2]/pos_norm]
+	rddotJ2 = [MU/pos_norm**2*(RE/pos_norm)**2*J2*(15/2*(pos[2]/pos_norm)**2 - 3/2)*pos[0]/pos_norm, 
+			MU/pos_norm**2*(RE/pos_norm)**2*J2*(15/2*(pos[2]/pos_norm)**2 - 3/2)*pos[1]/pos_norm, 
+			MU/pos_norm**2*(RE/pos_norm)**2*J2*(15/2*(pos[2]/pos_norm)**2 - 9/2)*pos[2]/pos_norm]
 	
 	acc = rddot2B + rddotJ2
 	
@@ -47,11 +48,12 @@ def radius(a, ecc, nu):
 
 def kepler2state(a, e, i, Omega, omega, nu):
 	rc = radius(a, e, nu)
-	E = 2*m.atan2(m.tan(nu/2), m.sqrt((1+e)/(1-e)))
+	E = 2*m.atan2(m.tan(nu/2), m.sqrt((1 + e)/(1 - e)))
 	o = rc*np.array([m.cos(nu), m.sin(nu), 0])
-	odot = m.sqrt(MU*a)/rc*np.array([-m.sin(E), m.sqrt(1-e**2)*m.cos(E), 0])
-	r = Mult4(Rot(Omega)[2], Rot(i)[0], Rot(omega)[2], o)
-	rdot = Mult4(Rot(Omega)[2], Rot(i)[0], Rot(omega)[2], odot)
+	odot = m.sqrt(MU*a)/rc*np.array([-m.sin(E), m.sqrt(1 - e**2)*m.cos(E), 0])
+
+	r = np.matmul(Rot(Omega)[2], np.matmul(Rot(i)[0], np.matmul(Rot(omega)[2], o)))
+	rdot = np.matmul(Rot(Omega)[2], np.matmul(Rot(i)[0], np.matmul(Rot(omega)[2], odot)))
 	return r, rdot
 
 # Initial conditions
@@ -93,7 +95,7 @@ for i in range(int(time / dt)):
     r = r_new
     rdot = rdot_new
 
-# Convert lists to NumPy arrays for easy slicing and plotting
+# Convert lists to numpy arrays
 r_array = np.array(r_array)
 rdot_array = np.array(rdot_array)
 
