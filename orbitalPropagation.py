@@ -10,8 +10,10 @@ DAY_SECONDS = 86400 						# [s] Seconds in a solar day
 
 def Rot(a):
 	"""
-	a: angle [rad]
-	Rot: matrix 3x3
+	Rotation matrices method
+
+	:param a: rotation angle [rad]
+	:return: matrix 3x3
 	"""
 	c = np.cos(a)
 	s = np.sin(a)
@@ -78,8 +80,10 @@ r, rdot = kepler2state(a, e, i, Omega, omega, nu)
 rddot, jerk = accelerations(r, rdot)
 
 # Simulation parameters
-time = DAY_SECONDS*5  # total time
+time = DAY_SECONDS*1  # total time
 dt = 10    # time step
+
+#Here is a test to see whether the problem is fixed
 
 # Initialize arrays to store position and velocity
 r_array = []
@@ -115,4 +119,15 @@ Z = RE * np.cos(A)              # Z coordinates
 eci = fig2.add_subplot(111, projection = '3d')
 eci.plot_wireframe(X, Y, Z, color = 'c', zorder = 1, alpha = 0.25)  # Sphere
 eci.plot3D(r_array[:, 0], r_array[:, 1], r_array[:, 2], color = 'm')  # Trajectory
+
+plt.figure()
+plt.plot(r_array[:, 0], color = 'r')
+plt.plot(r_array[:, 1], color = 'g')
+plt.plot(r_array[:, 2], color = 'b')
+plt.grid()
+plt.legend(['$X_{ECI}$', '$Y_{ECI}$', '$Z_{ECI}$'])
+
+plt.title('Coordinates in ECI of the satellite versus time')
+plt.xlabel(f"Time, one step = {dt} sec")
+plt.ylabel('ECI coordinates in m')
 plt.show()
