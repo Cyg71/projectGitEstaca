@@ -31,6 +31,7 @@ def Rot(a):
 
 	return Rotx, Roty, Rotz
 
+
 # Acceleration function
 def accelerations(pos, vel):
 	"""
