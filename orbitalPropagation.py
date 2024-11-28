@@ -35,8 +35,8 @@ def Rot(a):
 # Acceleration function
 def accelerations(pos, vel):
 	"""
-	param : position & velocity
-	return : acceleration & jerk : time deritative of acceleration (m/s3)
+	param: position & velocity
+	return: acceleration (m/s²) & jerk: time deritative of acceleration (m/s3)
 	"""
 	pos_norm = np.linalg.norm(pos)
 	rddot2B = - MU * pos / pos_norm**3
@@ -54,21 +54,24 @@ def radius(a, ecc, nu):
 	"""
 	param : a,ecc,nu 
 
-	a : half major axis [m], defined as a float
-	ecc : eccenntricity (=distance between focal point / half major axis), defined as a float
-	nu : angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+	a: semi major axis [m], defined as a float
+	ecc: eccenntricity (=distance between focal point / half major axis), defined as a float
+	nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
 	
-	return : bare position radius for a non-circular orbit 
+	return: bare position radius for a non-circular orbit 
 	"""
 	return a * (1 - ecc**2)/(1 + ecc * m.cos(nu))
 
 def kepler2state(a, e, i, Omega, omega, nu):
 	"""
-	param : a,e,i,Omega,omega,nu
-	i : Incidence, defined as a float [rad]
-	omega : argument from perigee, is the position of perigee relative to ascending node, defined as a float [rad]
+	param: a,e,i,Omega,omega,nu
+	a: semi major axis [m], defined as a float
+	ecc: eccenntricity (=distance between focal point / half major axis), defined as a float
+	nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+	i: Incidence, defined as a float [rad]
+	omega: argument from perigee, is the position of perigee relative to ascending node, defined as a float [rad]
 
-	return : r=gravitational potential energy & rdot : aaaaaa
+	return: r:position vector & rdot: velocity vector
 	"""
 	rc = radius(a, e, nu)
 	E = 2*m.atan2(m.tan(nu/2), m.sqrt((1 + e)/(1 - e)))
