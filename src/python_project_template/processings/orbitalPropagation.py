@@ -8,7 +8,7 @@ J2 = 1082.62668e-6 							# Perturbation constant from gravitational potential
 RE = 6378.137e3 							# [m] Equatorial radius of the Earth
 DAY_SECONDS = 86400 						# [s] Seconds in a solar day
 
-def Rot(a, u):
+def Rot(a: float, u: int):
 	"""
 	Rotation matrices method
 
@@ -39,12 +39,15 @@ def Rot(a, u):
 
 	return Rot
 
-
 # Acceleration function
-def accelerations(pos, vel):
+def accelerations(pos: np.array, vel: np.array):
 	"""
-	param: position & velocity
-	return: acceleration (m/s²) & jerk: time deritative of acceleration (m/s3)
+	Calculates the instantaneous acceleration and jerk vectors
+
+	:param pos: array 3x1 Position vector
+	:param vel: array 3x1 Velocity vector
+
+	:returns: acceleration vector 3x1 (m/s2) & jerk vector 3x1 first time deritative of acceleration (m/s3)
 	"""
 	pos_norm = np.linalg.norm(pos)
 	rddot2B = - MU * pos / pos_norm**3
@@ -58,28 +61,31 @@ def accelerations(pos, vel):
 	jerk = - MU * (vel/pos_norm**3 - 3*pos*np.dot(pos, vel)/pos_norm**5)
 	return acc, jerk
 
-def radius(a, ecc, nu):
+def radius(a: float, ecc: float, nu: float):
 	"""
-	param : a,ecc,nu 
+	Instantaneous radius of the orbit
 
-	a: semi major axis [m], defined as a float
-	ecc: eccenntricity (=distance between focal point / half major axis), defined as a float
-	nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+	:param a: semi major axis [m], defined as a float
+	:param ecc: eccentricity (=distance between focal point / half major axis), defined as a float
+	:param nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
 	
-	return: bare position radius for a non-circular orbit 
+	:returns: position radius for a non-circular orbit 
 	"""
 	return a * (1 - ecc**2)/(1 + ecc * m.cos(nu))
 
-def kepler2state(a, e, i, Omega, omega, nu):
+def kepler2state(a: float, e: float, i: float, Omega: float, omega: float, nu: float):
 	"""
-	param: a,e,i,Omega,omega,nu
-	a: semi major axis [m], defined as a float
-	ecc: eccenntricity (=distance between focal point / half major axis), defined as a float
-	nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
-	i: Incidence, defined as a float [rad]
-	omega: argument from perigee, is the position of perigee relative to ascending node, defined as a float [rad]
+	Converts the Keplerian elements into state vectors
 
-	return: r:position vector & rdot: velocity vector
+	param: a,e,i,Omega,omega,nu
+	:param a: semi major axis [m], defined as a float
+	:param ecc: eccentricity (=distance between focal point / half major axis), defined as a float
+	:param i: inclination of the orbit [rad], defined as a float
+	:param Omega: longitude of the right ascension of the ascending node [rad], defined as a float
+	:param omega: argument of perigee [rad], defined as a float
+	:param nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+
+	:returns: r:position vector 3x1 & rdot: velocity vector 3x1
 	"""
 	rc = radius(a, e, nu)
 	E = 2*m.atan2(m.tan(nu/2), m.sqrt((1 + e)/(1 - e)))
@@ -91,12 +97,13 @@ def kepler2state(a, e, i, Omega, omega, nu):
 	return r, rdot
 
 # Initial conditions
-def tle2kepler(TLE):
+def tle2kepler(TLE: np.array):
 	"""
-	param : TLE 
-	TLE : standardized representation of orbital parameters 
+	Converts the TLE into Keplerian elements
 
-	return : orbital parameters : a,e,i,Omega,omega
+	:param TLE: TLE : standardized representation of orbital parameters 
+
+	:returns: orbital parameters : a, e, i, Omega, omega and nu
 	"""
 	tle2 = TLE[1].split(' ')
 	T = DAY_SECONDS/float(tle2[7])
@@ -113,15 +120,13 @@ def tle2kepler(TLE):
 TLE = ['1 55044U 23001AM 24318.44334776 .00176663 00000-0 20148-2 0 9996', 
 	   '2 55044 97.4024 23.3159 0005184 341.4271 18.6796 15.616308481 3798']
 
-a, e, i, Omega, omega, nu = tle2kepler(TLE)
-r, rdot = kepler2state(a, e, i, Omega, omega, nu)
-rddot, jerk = accelerations(r, rdot)
+a, e, i, Omega, omega, nu = tle2kepler(TLE)	# [m, -, rad, rad, rad, rad]
+r, rdot = kepler2state(a, e, i, Omega, omega, nu)	# [m, m/s]
+rddot, jerk = accelerations(r, rdot)	# [m/s2, m/s3]
 
 # Simulation parameters
-time = DAY_SECONDS*1  # total time
-dt = 10    # time step
-
-#Here is a test to see whether the problem is fixed
+time = DAY_SECONDS*1  # [s] total time
+dt = 10    # [s] time step
 
 # Initialize arrays to store position and velocity
 r_array = []
