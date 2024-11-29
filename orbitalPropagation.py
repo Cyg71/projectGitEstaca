@@ -37,8 +37,13 @@ def Rot(a, u):
 
 	return Rot
 
+
 # Acceleration function
 def accelerations(pos, vel):
+	"""
+	param: position & velocity
+	return: acceleration (m/s²) & jerk: time deritative of acceleration (m/s3)
+	"""
 	pos_norm = np.linalg.norm(pos)
 	rddot2B = - MU * pos / pos_norm**3
 
@@ -52,9 +57,28 @@ def accelerations(pos, vel):
 	return acc, jerk
 
 def radius(a, ecc, nu):
+	"""
+	param : a,ecc,nu 
+
+	a: semi major axis [m], defined as a float
+	ecc: eccenntricity (=distance between focal point / half major axis), defined as a float
+	nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+	
+	return: bare position radius for a non-circular orbit 
+	"""
 	return a * (1 - ecc**2)/(1 + ecc * m.cos(nu))
 
 def kepler2state(a, e, i, Omega, omega, nu):
+	"""
+	param: a,e,i,Omega,omega,nu
+	a: semi major axis [m], defined as a float
+	ecc: eccenntricity (=distance between focal point / half major axis), defined as a float
+	nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+	i: Incidence, defined as a float [rad]
+	omega: argument from perigee, is the position of perigee relative to ascending node, defined as a float [rad]
+
+	return: r:position vector & rdot: velocity vector
+	"""
 	rc = radius(a, e, nu)
 	E = 2*m.atan2(m.tan(nu/2), m.sqrt((1 + e)/(1 - e)))
 	o = rc*np.array([m.cos(nu), m.sin(nu), 0])
@@ -66,17 +90,23 @@ def kepler2state(a, e, i, Omega, omega, nu):
 
 # Initial conditions
 def tle2kepler(TLE):
-    tle2 = TLE[1].split(' ')
-    T = DAY_SECONDS/float(tle2[7])
-    a = (MU*(T/(2*m.pi))**2)**(1/3)
-	
-    e = float(str(0.) + tle2[4])
-    i = float(tle2[2]) * m.pi/180
-    Omega = float(tle2[3]) * m.pi/180
-    omega = float(tle2[5]) * m.pi/180
-    nu = float(tle2[6]) * m.pi/180
+	"""
+	param : TLE 
+	TLE : standardized representation of orbital parameters 
 
-    return a, e, i, Omega, omega, nu
+	return : orbital parameters : a,e,i,Omega,omega
+	"""
+	tle2 = TLE[1].split(' ')
+	T = DAY_SECONDS/float(tle2[7])
+	a = (MU*(T/(2*m.pi))**2)**(1/3)
+
+	e = float(str(0.) + tle2[4])
+	i = float(tle2[2]) * m.pi/180
+	Omega = float(tle2[3]) * m.pi/180
+	omega = float(tle2[5]) * m.pi/180
+	nu = float(tle2[6]) * m.pi/180
+
+	return a, e, i, Omega, omega, nu
 
 TLE = ['1 55044U 23001AM 24318.44334776 .00176663 00000-0 20148-2 0 9996', 
 	   '2 55044 97.4024 23.3159 0005184 341.4271 18.6796 15.616308481 3798']
