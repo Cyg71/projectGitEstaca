@@ -18,8 +18,8 @@ This project is a J2 Secular Orbital propagator.
     pip install -r requirements.txt
 
 ## Contact
-Valentine LEGAT - Valentine.LEGAT@estaca.eu <br />
-Cyriaque GUILLOT - Cyriaque.GUILLOT@estaca.eu
+Valentine LEGAT - Valentine.LEGAT@estaca.eu - ESTACA Paris Saclay <br />
+Cyriaque GUILLOT - Cyriaque.GUILLOT@estaca.eu - ESTACA Paris Saclay
 
 ## Acknowledgements
-This project was made possible thanks to the help and introduction of Nicolas Dagoneau, Researcher in Astrophysics and software engineer at CEA.
+This project was made possible thanks to the introduction and help of Nicolas Dagoneau, Researcher in Astrophysics and software engineer at CEA.
