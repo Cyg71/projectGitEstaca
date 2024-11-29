@@ -1,2 +1,4 @@
 numpy
 poetry
+coveralls
+myst-parser

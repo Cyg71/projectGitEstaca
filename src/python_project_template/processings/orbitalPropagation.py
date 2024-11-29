@@ -21,18 +21,20 @@ def Rot(a, u):
 	s = np.sin(a)
 	if u == 0:
 		Rot = np.array([[1, 0, 0], 
-					[0, c, -s], 
-					[0, s, c]])
+						[0, c, -s], 
+						[0, s, c]])
 	elif u == 1:
 		Rot = np.array([[c, 0, s], 
-					[0, 1, 0], 
-					[-s, 0, c]])
+						[0, 1, 0], 
+						[-s, 0, c]])
 	elif u == 2:
 		Rot = np.array([[c, -s, 0], 
-					[s, c, 0], 
-					[0, 0, 1]])
+						[s, c, 0], 
+						[0, 0, 1]])
 	else:
-		Rot = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+		Rot = np.array([[1, 0, 0],
+						[0, 1, 0], 
+						[0, 0, 1]])
 		print("Error: wrong axis number provided for rotation matrix")
 
 	return Rot
