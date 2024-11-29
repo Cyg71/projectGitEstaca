@@ -8,28 +8,34 @@ J2 = 1082.62668e-6 							# Perturbation constant from gravitational potential
 RE = 6378.137e3 							# [m] Equatorial radius of the Earth
 DAY_SECONDS = 86400 						# [s] Seconds in a solar day
 
-def Rot(a):
+def Rot(a, u):
 	"""
 	Rotation matrices method
 
 	:param a: rotation angle [rad]
-	:return: matrix 3x3
+	:param u: rotation axis (0 = x, 1 = y, 2 = z)
+
+	:returns: matrix 3x3
 	"""
 	c = np.cos(a)
 	s = np.sin(a)
-	Rotx = np.array([[1, 0, 0], 
-				  [0, c, -s], 
-        		  [0, s, c]])
+	if u == 0:
+		Rot = np.array([[1, 0, 0], 
+					[0, c, -s], 
+					[0, s, c]])
+	elif u == 1:
+		Rot = np.array([[c, 0, s], 
+					[0, 1, 0], 
+					[-s, 0, c]])
+	elif u == 2:
+		Rot = np.array([[c, -s, 0], 
+					[s, c, 0], 
+					[0, 0, 1]])
+	else:
+		Rot = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+		print("Error: wrong axis number provided for rotation matrix")
 
-	Roty = np.array([[c, 0, s], 
-		          [0, 1, 0], 
-        		  [-s, 0, c]])
-
-	Rotz = np.array([[c, -s, 0], 
-		          [s, c, 0], 
-	      		  [0, 0, 1]])
-
-	return Rotx, Roty, Rotz
+	return Rot
 
 # Acceleration function
 def accelerations(pos, vel):
@@ -54,8 +60,8 @@ def kepler2state(a, e, i, Omega, omega, nu):
 	o = rc*np.array([m.cos(nu), m.sin(nu), 0])
 	odot = m.sqrt(MU*a)/rc*np.array([-m.sin(E), m.sqrt(1 - e**2)*m.cos(E), 0])
 
-	r = np.matmul(Rot(Omega)[2], np.matmul(Rot(i)[0], np.matmul(Rot(omega)[2], o)))
-	rdot = np.matmul(Rot(Omega)[2], np.matmul(Rot(i)[0], np.matmul(Rot(omega)[2], odot)))
+	r = np.matmul(Rot(Omega, 2), np.matmul(Rot(i, 0), np.matmul(Rot(omega, 2), o)))
+	rdot = np.matmul(Rot(Omega, 2), np.matmul(Rot(i, 0), np.matmul(Rot(omega, 2), odot)))
 	return r, rdot
 
 # Initial conditions
@@ -120,13 +126,13 @@ eci = fig2.add_subplot(111, projection = '3d')
 eci.plot_wireframe(X, Y, Z, color = 'c', zorder = 1, alpha = 0.25)  # Sphere
 eci.plot3D(r_array[:, 0], r_array[:, 1], r_array[:, 2], color = 'm')  # Trajectory
 
+# Plotting the ECI coordinates in 2D
 plt.figure()
-plt.plot(r_array[:, 0], color = 'r')
-plt.plot(r_array[:, 1], color = 'g')
-plt.plot(r_array[:, 2], color = 'b')
+plt.plot(r_array[:, 0], color = 'r')	# X_ECI
+plt.plot(r_array[:, 1], color = 'g')	# Y_ECI
+plt.plot(r_array[:, 2], color = 'b')	# Z_ECI
 plt.grid()
 plt.legend(['$X_{ECI}$', '$Y_{ECI}$', '$Z_{ECI}$'])
-
 plt.title('Coordinates in ECI of the satellite versus time')
 plt.xlabel(f"Time, one step = {dt} sec")
 plt.ylabel('ECI coordinates in m')
