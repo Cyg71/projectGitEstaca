@@ -58,7 +58,7 @@ def accelerations(pos, vel):
 
 def radius(a, ecc, nu):
 	"""
-	param : a,ecc,nu 
+	param: a,ecc,nu 
 
 	a: semi major axis [m], defined as a float
 	ecc: eccenntricity (=distance between focal point / half major axis), defined as a float
@@ -91,10 +91,10 @@ def kepler2state(a, e, i, Omega, omega, nu):
 # Initial conditions
 def tle2kepler(TLE):
 	"""
-	param : TLE 
-	TLE : standardized representation of orbital parameters 
+	param: TLE 
+	TLE: standardized representation of orbital parameters 
 
-	return : orbital parameters : a,e,i,Omega,omega
+	return: orbital parameters : a,e,i,Omega,omega
 	"""
 	tle2 = TLE[1].split(' ')
 	T = DAY_SECONDS/float(tle2[7])
