@@ -13,10 +13,12 @@ def Rot(a: float, u: int)->NDArray:
 	"""
 	Rotation matrices method
 
-	:param a: rotation angle [rad]
-	:param u: rotation axis (0 = x, 1 = y, 2 = z)
+	Args:
+		a: rotation angle [rad]
+		u: rotation axis (0 = x, 1 = y, 2 = z)
 
-	:returns: matrix 3x3
+	Returns:
+		3x3 matrix NDArray
 	"""
 	c = np.cos(a)
 	s = np.sin(a)
@@ -44,10 +46,12 @@ def accelerations(pos: NDArray, vel: NDArray) -> tuple[NDArray, NDArray]:
     """
     Calculates the instantaneous acceleration and jerk vectors
 
-    :param pos: array 3x1 Position vector
-    :param vel: array 3x1 Velocity vector
+	Args:
+    	pos: array 3x1 Position vector
+    	vel: array 3x1 Velocity vector
 
-    :returns: acceleration vector 3x1 (m/s2) & jerk vector 3x1 first time deritative of acceleration (m/s3)
+    Returns: 
+		Acceleration vector 3x1 (m/s2) & jerk vector 3x1 first time deritative of acceleration (m/s3), NDArray
     """
     pos_norm = np.linalg.norm(pos)
     
@@ -70,11 +74,13 @@ def radius(a: float, ecc: float, nu: float)->float:
 	"""
 	Instantaneous radius of the orbit
 
-	:param a: semi major axis [m], defined as a float
-	:param ecc: eccentricity (=distance between focal point / half major axis), defined as a float
-	:param nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+	Args:
+		a: semi major axis [m], defined as a float
+		ecc: eccentricity (=distance between focal point / half major axis), defined as a float
+		nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
 	
-	:returns: position radius for a non-circular orbit 
+	Returns: 
+		Position radius for a non-circular orbit, float
 	"""
 	return a * (1 - ecc**2)/(1 + ecc * m.cos(nu))
 
@@ -82,15 +88,16 @@ def kepler2state(a: float, e: float, i: float, Omega: float, omega: float, nu: f
 	"""
 	Converts the Keplerian elements into state vectors
 
-	param: a,e,i,Omega,omega,nu
-	:param a: semi major axis [m], defined as a float
-	:param ecc: eccentricity (=distance between focal point / half major axis), defined as a float
-	:param i: inclination of the orbit [rad], defined as a float
-	:param Omega: longitude of the right ascension of the ascending node [rad], defined as a float
-	:param omega: argument of perigee [rad], defined as a float
-	:param nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
+	Args:
+		a: semi major axis [m], defined as a float
+		ecc: eccentricity (=distance between focal point / half major axis), defined as a float
+		i: inclination of the orbit [rad], defined as a float
+		Omega: longitude of the right ascension of the ascending node [rad], defined as a float
+		omega: argument of perigee [rad], defined as a float
+		nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float
 
-	:returns: r:position vector 3x1 & rdot: velocity vector 3x1
+	Returns: 
+		r:position vector 3x1 & rdot: velocity vector 3x1, NDArray
 	"""
 	rc = radius(a, e, nu)
 	E = 2*m.atan2(m.tan(nu/2), m.sqrt((1 + e)/(1 - e)))

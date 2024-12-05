@@ -3,10 +3,8 @@ requires-python = ">=3.11"
 name = "projectgitestaca"
 description = "Propagating stuff in space"
 authors = [
-    { name = 'Arnaud Somville', email = 'arnaud.somville@estaca.eu' },
-    {name = "Arnaud SOMVILLE", email = "arnaud.somville@estaca.eu"},
     {name = "Cyriaque Guillot", email = "Cyriaque.Guillot@estaca.eu"},
-    {name = "Cycy", email = "dummy@dummy.fr"},
+    {name = "Valentine Legat", email = "Valentine.Legat@estaca.eu"},
 ]
 version = "0.1.0"
 dependencies = [
