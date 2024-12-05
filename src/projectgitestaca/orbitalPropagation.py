@@ -156,14 +156,18 @@ if __name__ == '__main__': # pragma: no cover
 
 	# Plotting the Earth and the trajectory
 	eci = fig2.add_subplot(111, projection = '3d')
-	eci.plot_wireframe(X, Y, Z, color = 'c', zorder = 1, alpha = 0.25)  	# Sphere
-	eci.plot3D(r_array[:, 0], r_array[:, 1], r_array[:, 2], color = 'm')  	# Trajectory
-
+	# Sphere
+	eci.plot_wireframe(X, Y, Z, color = 'c', zorder = 1, alpha = 0.25)  # type: ignore
+	# Trajectory
+	eci.plot3D(r_array[:, 0], r_array[:, 1], r_array[:, 2], color = 'm') # type: ignore
 	# Plotting the ECI coordinates in 2D
 	plt.figure()
-	plt.plot(r_array[:, 0], color = 'r')	# X_ECI
-	plt.plot(r_array[:, 1], color = 'g')	# Y_ECI
-	plt.plot(r_array[:, 2], color = 'b')	# Z_ECI
+	# X_ECI
+	plt.plot(r_array[:, 0], color = 'r') # type: ignore
+	# Y_ECI 
+	plt.plot(r_array[:, 1], color = 'g') # type: ignore
+	# Z_ECI
+	plt.plot(r_array[:, 2], color = 'b') # type: ignore
 	plt.grid()
 	plt.legend(['$X_{ECI}$', '$Y_{ECI}$', '$Z_{ECI}$'])
 	plt.title('Coordinates in ECI of the satellite versus time')
