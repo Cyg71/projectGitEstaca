@@ -1,4 +1,10 @@
-from orbitalPropagation import *
+
+
+import math as m
+import numpy as np
+
+from projectgitestaca.orbitalPropagation import MU, RE, Rot, accelerations, kepler2state, radius
+
 
 def test_Rot():
     """Rotational matrices test."""
