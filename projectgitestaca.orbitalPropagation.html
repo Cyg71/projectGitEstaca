@@ -96,7 +96,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>matrix 3x3</p>
+<dd class="field-even"><p>3x3 matrix NDArray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -105,15 +105,14 @@
 <dt class="sig sig-object py" id="projectgitestaca.orbitalPropagation.accelerations">
 <span class="sig-prename descclassname"><span class="pre">projectgitestaca.orbitalPropagation.</span></span><span class="sig-name descname"><span class="pre">accelerations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/projectgitestaca/orbitalPropagation.html#accelerations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projectgitestaca.orbitalPropagation.accelerations" title="Link to this definition"></a></dt>
 <dd><p>Calculates the instantaneous acceleration and jerk vectors</p>
+<blockquote>
+<div><p>Args:
+pos: array 3x1 Position vector
+vel: array 3x1 Velocity vector</p>
+</div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pos</strong> – array 3x1 Position vector</p></li>
-<li><p><strong>vel</strong> – array 3x1 Velocity vector</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>acceleration vector 3x1 (m/s2) &amp; jerk vector 3x1 first time deritative of acceleration (m/s3)</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Acceleration vector 3x1 (m/s2) &amp; jerk vector 3x1 first time deritative of acceleration (m/s3), NDArray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -122,16 +121,22 @@
 <dt class="sig sig-object py" id="projectgitestaca.orbitalPropagation.kepler2state">
 <span class="sig-prename descclassname"><span class="pre">projectgitestaca.orbitalPropagation.</span></span><span class="sig-name descname"><span class="pre">kepler2state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/projectgitestaca/orbitalPropagation.html#kepler2state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projectgitestaca.orbitalPropagation.kepler2state" title="Link to this definition"></a></dt>
 <dd><p>Converts the Keplerian elements into state vectors</p>
-<p>param: a,e,i,Omega,omega,nu
-:param a: semi major axis [m], defined as a float
-:param ecc: eccentricity (=distance between focal point / half major axis), defined as a float
-:param i: inclination of the orbit [rad], defined as a float
-:param Omega: longitude of the right ascension of the ascending node [rad], defined as a float
-:param omega: argument of perigee [rad], defined as a float
-:param nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>r:position vector 3x1 &amp; rdot: velocity vector 3x1</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – semi major axis [m], defined as a float</p></li>
+<li><p><strong>ecc</strong> – eccentricity (=distance between focal point / half major axis), defined as a float</p></li>
+<li><p><strong>i</strong> – inclination of the orbit [rad], defined as a float</p></li>
+<li><p><strong>Omega</strong> – longitude of the right ascension of the ascending node [rad], defined as a float</p></li>
+<li><p><strong>omega</strong> – argument of perigee [rad], defined as a float</p></li>
+<li><p><strong>nu</strong> – angle between the direction of the periapsis and the current position of an object [rad], defined as a float</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>position vector 3x1 &amp; rdot: velocity vector 3x1, NDArray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>r</p>
 </dd>
 </dl>
 </dd></dl>
@@ -149,7 +154,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>position radius for a non-circular orbit</p>
+<dd class="field-even"><p>Position radius for a non-circular orbit, float</p>
 </dd>
 </dl>
 </dd></dl>
