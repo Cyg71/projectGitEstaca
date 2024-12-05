@@ -1,14 +1,19 @@
 [project]
 requires-python = ">=3.11" 
-name = "my_project"
-description = "Default template for PDM package"
+name = "projectGitEstaca"
+description = "Propagate stuff in space"
 authors = [
     { name = 'Arnaud Somville', email = 'arnaud.somville@estaca.eu' },
     {name = "Arnaud SOMVILLE", email = "arnaud.somville@estaca.eu"},
+    {name = "Cyriaque Guillot", email = "Cyriaque.Guillot@estaca.eu"},
 ]
 version = "0.1.0"
 dependencies = [
     "pydantic>=2.6.4",
+    "numpy>=2.1.3",
+    "poetry",
+    "coveralls",
+    "myst-parser",
 ]
 readme = "README.md"
 license = {text = "MIT"}
