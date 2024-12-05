@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projectgitestaca.orbitalPropagation &mdash; Your Project 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Your Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Your Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">projectgitestaca.orbitalPropagation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for projectgitestaca.orbitalPropagation</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span> <span class="k">as</span> <span class="nn">m</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Physical Constants</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="mf">3.986004418e14</span> 						<span class="c1"># [m**3/s**2] Gravitational parameter of the Earth</span>
+<span class="n">J2</span> <span class="o">=</span> <span class="mf">1082.62668e-6</span> 							<span class="c1"># Perturbation constant from gravitational potential</span>
+<span class="n">RE</span> <span class="o">=</span> <span class="mf">6378.137e3</span> 							<span class="c1"># [m] Equatorial radius of the Earth</span>
+<span class="n">DAY_SECONDS</span> <span class="o">=</span> <span class="mi">86400</span> 						<span class="c1"># [s] Seconds in a solar day</span>
+
+<div class="viewcode-block" id="Rot">
+<a class="viewcode-back" href="../../projectgitestaca.orbitalPropagation.html#projectgitestaca.orbitalPropagation.Rot">[docs]</a>
+<span class="k">def</span> <span class="nf">Rot</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NDArray</span><span class="p">:</span>	
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Rotation matrices method</span>
+
+<span class="sd">	:param a: rotation angle [rad]</span>
+<span class="sd">	:param u: rotation axis (0 = x, 1 = y, 2 = z)</span>
+
+<span class="sd">	:returns: matrix 3x3</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+	<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>						<span class="c1"># Rotation about the x-axis</span>
+		<span class="n">Rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+						<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">-</span><span class="n">s</span><span class="p">],</span> 
+						<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">]])</span>
+	<span class="k">elif</span> <span class="n">u</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>					<span class="c1"># Rotation about the y-axis</span>
+		<span class="n">Rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="p">],</span> 
+						<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+						<span class="p">[</span><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="p">]])</span>
+	<span class="k">elif</span> <span class="n">u</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>					<span class="c1"># Rotation about the z-axis</span>
+		<span class="n">Rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">c</span><span class="p">,</span> <span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+						<span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+						<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+	<span class="k">else</span><span class="p">:</span>							<span class="c1"># Wrong axis number: error</span>
+		<span class="n">Rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+						<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+						<span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: wrong axis number provided for rotation matrix&quot;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">Rot</span></div>
+
+
+<span class="c1"># Acceleration function</span>
+<div class="viewcode-block" id="accelerations">
+<a class="viewcode-back" href="../../projectgitestaca.orbitalPropagation.html#projectgitestaca.orbitalPropagation.accelerations">[docs]</a>
+<span class="k">def</span> <span class="nf">accelerations</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">vel</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">NDArray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the instantaneous acceleration and jerk vectors</span>
+
+<span class="sd">    :param pos: array 3x1 Position vector</span>
+<span class="sd">    :param vel: array 3x1 Velocity vector</span>
+
+<span class="sd">    :returns: acceleration vector 3x1 (m/s2) &amp; jerk vector 3x1 first time deritative of acceleration (m/s3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pos_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">pos_norm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Cas spécial : position à l&#39;origine</span>
+
+    <span class="n">rddot2B</span> <span class="o">=</span> <span class="o">-</span> <span class="n">MU</span> <span class="o">*</span> <span class="n">pos</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="o">**</span><span class="mi">3</span>
+
+    <span class="n">rddotJ2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">MU</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">RE</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">J2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">15</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">,</span>
+        <span class="n">MU</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">RE</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">J2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">15</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">,</span>
+        <span class="n">MU</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">RE</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">J2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">15</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">9</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">rddot2B</span> <span class="o">+</span> <span class="n">rddotJ2</span>
+    <span class="n">jerk</span> <span class="o">=</span> <span class="o">-</span> <span class="n">MU</span> <span class="o">*</span> <span class="p">(</span><span class="n">vel</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">pos</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">vel</span><span class="p">)</span> <span class="o">/</span> <span class="n">pos_norm</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">acc</span><span class="p">,</span> <span class="n">jerk</span></div>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">accelerations</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">RE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])))</span>
+<div class="viewcode-block" id="radius">
+<a class="viewcode-back" href="../../projectgitestaca.orbitalPropagation.html#projectgitestaca.orbitalPropagation.radius">[docs]</a>
+<span class="k">def</span> <span class="nf">radius</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ecc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">float</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Instantaneous radius of the orbit</span>
+
+<span class="sd">	:param a: semi major axis [m], defined as a float</span>
+<span class="sd">	:param ecc: eccentricity (=distance between focal point / half major axis), defined as a float</span>
+<span class="sd">	:param nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float</span>
+<span class="sd">	</span>
+<span class="sd">	:returns: position radius for a non-circular orbit </span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ecc</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ecc</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="kepler2state">
+<a class="viewcode-back" href="../../projectgitestaca.orbitalPropagation.html#projectgitestaca.orbitalPropagation.kepler2state">[docs]</a>
+<span class="k">def</span> <span class="nf">kepler2state</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">Omega</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">omega</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span><span class="n">NDArray</span><span class="p">]:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Converts the Keplerian elements into state vectors</span>
+
+<span class="sd">	param: a,e,i,Omega,omega,nu</span>
+<span class="sd">	:param a: semi major axis [m], defined as a float</span>
+<span class="sd">	:param ecc: eccentricity (=distance between focal point / half major axis), defined as a float</span>
+<span class="sd">	:param i: inclination of the orbit [rad], defined as a float</span>
+<span class="sd">	:param Omega: longitude of the right ascension of the ascending node [rad], defined as a float</span>
+<span class="sd">	:param omega: argument of perigee [rad], defined as a float</span>
+<span class="sd">	:param nu: angle between the direction of the periapsis and the current position of an object [rad], defined as a float</span>
+
+<span class="sd">	:returns: r:position vector 3x1 &amp; rdot: velocity vector 3x1</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">rc</span> <span class="o">=</span> <span class="n">radius</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">nu</span><span class="p">)</span>
+	<span class="n">E</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">nu</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="p">)))</span>
+	<span class="n">o</span> <span class="o">=</span> <span class="n">rc</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">nu</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">nu</span><span class="p">),</span> <span class="mi">0</span><span class="p">])</span>
+	<span class="n">odot</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">MU</span><span class="o">*</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">rc</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">m</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">E</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">m</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">E</span><span class="p">),</span> <span class="mi">0</span><span class="p">])</span>
+
+	<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Rot</span><span class="p">(</span><span class="n">Omega</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Rot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Rot</span><span class="p">(</span><span class="n">omega</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">o</span><span class="p">)))</span>
+	<span class="n">rdot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Rot</span><span class="p">(</span><span class="n">Omega</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Rot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Rot</span><span class="p">(</span><span class="n">omega</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">odot</span><span class="p">)))</span>
+	<span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">rdot</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span> <span class="c1"># pragma: no cover</span>
+	<span class="c1"># Initial conditions - Keplerian elements</span>
+	<span class="n">TLE</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;1 55044U 23001AM 24318.44334776 .00176663 00000-0 20148-2 0 9996&#39;</span><span class="p">,</span> 
+		<span class="s1">&#39;2 55044 97.4024 23.3159 0005184 341.4271 18.6796 15.616308481 3798&#39;</span><span class="p">]</span>
+
+	<span class="n">tle2</span> <span class="o">=</span> <span class="n">TLE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+	<span class="n">T</span> <span class="o">=</span> <span class="n">DAY_SECONDS</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">tle2</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>		<span class="c1"># [s] Orbital period</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">MU</span><span class="o">*</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>		<span class="c1"># [m] Semi-major axis, using Kepler&#39;s thrid law</span>
+	<span class="n">e</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span> <span class="o">+</span> <span class="n">tle2</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>		<span class="c1"># [-] Eccentricity</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tle2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>		<span class="c1"># [rad] Inclination</span>
+	<span class="n">Omega</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tle2</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>	<span class="c1"># [rad] Longitude of the Right Ascension of the Ascending Node (RAAN)</span>
+	<span class="n">omega</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tle2</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>	<span class="c1"># [rad] Argument of perigee</span>
+	<span class="n">nu</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tle2</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>		<span class="c1"># [rad] True anomaly</span>
+
+	<span class="c1"># Initial conditions - State vectors</span>
+	<span class="n">r</span><span class="p">,</span> <span class="n">rdot</span> <span class="o">=</span> <span class="n">kepler2state</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">Omega</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">nu</span><span class="p">)</span>	<span class="c1"># [m, m/s]</span>
+	<span class="n">rddot</span><span class="p">,</span> <span class="n">jerk</span> <span class="o">=</span> <span class="n">accelerations</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">rdot</span><span class="p">)</span>	<span class="c1"># [m/s2, m/s3]</span>
+
+	<span class="c1"># Simulation parameters</span>
+	<span class="n">time</span> <span class="o">=</span> <span class="n">DAY_SECONDS</span><span class="o">*</span><span class="mi">1</span>  <span class="c1"># [s] total time</span>
+	<span class="n">dt</span> <span class="o">=</span> <span class="mi">10</span>    <span class="c1"># [s] time step</span>
+
+	<span class="c1"># Initialize arrays to store position and velocity</span>
+	<span class="n">r_array</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">rdot_array</span> <span class="o">=</span> <span class="p">[]</span>
+
+	<span class="c1"># Main simulation loop</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)):</span>
+		<span class="n">r_new</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">rdot</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">+</span> <span class="n">rddot</span> <span class="o">*</span> <span class="n">dt</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">jerk</span> <span class="o">*</span> <span class="n">dt</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="mi">6</span>	<span class="c1"># [m] Forward Euler, order 3 integration</span>
+		<span class="n">rdot_new</span> <span class="o">=</span> <span class="n">rdot</span> <span class="o">+</span> <span class="n">rddot</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">+</span> <span class="n">jerk</span> <span class="o">*</span> <span class="n">dt</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span>					<span class="c1"># [m/s] Forward Euler, order 2 integration</span>
+		<span class="n">rddot</span><span class="p">,</span> <span class="n">jerk</span> <span class="o">=</span> <span class="n">accelerations</span><span class="p">(</span><span class="n">r_new</span><span class="p">,</span> <span class="n">rdot_new</span><span class="p">)</span>					<span class="c1"># [m/s2, m/s3] New acceleration and jerk vectors</span>
+		<span class="n">r_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r_new</span><span class="p">)</span>											<span class="c1"># [m] Position array</span>
+		<span class="n">rdot_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rdot_new</span><span class="p">)</span>										<span class="c1"># [m/s] Velocity array</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">r_new</span>														<span class="c1"># [m] Resetting position vector</span>
+		<span class="n">rdot</span> <span class="o">=</span> <span class="n">rdot_new</span>													<span class="c1"># [m/s] Resetting velocity vector</span>
+
+	<span class="c1"># Convert lists to numpy arrays</span>
+	<span class="n">r_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">r_array</span><span class="p">)</span>
+	<span class="n">rdot_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rdot_array</span><span class="p">)</span>
+
+	<span class="c1"># Plotting the orbit in 3D</span>
+	<span class="n">fig2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Orbit in ECI&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Creating a wireframe for the Earth</span>
+	<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>	<span class="c1"># Angular meshing</span>
+	<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>	<span class="c1"># Angular meshing</span>
+	<span class="n">A</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+	<span class="n">X</span> <span class="o">=</span> <span class="n">RE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>  <span class="c1"># X coordinates</span>
+	<span class="n">Y</span> <span class="o">=</span> <span class="n">RE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>  <span class="c1"># Y coordinates</span>
+	<span class="n">Z</span> <span class="o">=</span> <span class="n">RE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>              <span class="c1"># Z coordinates</span>
+
+	<span class="c1"># Plotting the Earth and the trajectory</span>
+	<span class="n">eci</span> <span class="o">=</span> <span class="n">fig2</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+	<span class="c1"># Sphere</span>
+	<span class="n">eci</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">zorder</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+	<span class="c1"># Trajectory</span>
+	<span class="n">eci</span><span class="o">.</span><span class="n">plot3D</span><span class="p">(</span><span class="n">r_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r_array</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+	<span class="c1"># Plotting the ECI coordinates in 2D</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+	<span class="c1"># X_ECI</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+	<span class="c1"># Y_ECI </span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;g&#39;</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+	<span class="c1"># Z_ECI</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r_array</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;$X_</span><span class="si">{ECI}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="s1">&#39;$Y_</span><span class="si">{ECI}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="s1">&#39;$Z_</span><span class="si">{ECI}</span><span class="s1">$&#39;</span><span class="p">])</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Coordinates in ECI of the satellite versus time&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time, one step = </span><span class="si">{</span><span class="n">dt</span><span class="si">}</span><span class="s2"> sec&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;ECI coordinates in m&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Your Name.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
