@@ -23,11 +23,14 @@ The Earth is not a perfect sphere. Due to the centrifugal forces, the equatorial
     ```bash
     conda create -y -n my_env python=3.11
     conda activate my_env
-    pip install pdm ruff=0.3.3 pre-commit
+    pip install pdm ruff==0.3.3 pre-commit
 3. Go to your folder and install the packages using pdm. Initialize the project if needed
     ```bash
     cd ~/your_work_folder
+    pdm init
     pdm install
+    pip install -r requirements.txt
+    cd src\projectgitestaca
 
 ## Contact
 Valentine LEGAT - Valentine.LEGAT@estaca.eu - ESTACA Paris-Saclay <br />
