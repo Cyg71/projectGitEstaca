@@ -2,7 +2,7 @@
 Repository of the ESTACA project about GitHub. Developped by Valentine LEGAT and Cyriaque GUILLOT, ESTACA students.
 
 ## Introduction
-This project is a J2 Secular Orbital propagator. It will calculate the successive position and velocity vectors in ECI, taking into account the gravity of the Earth (2-body perturbation) and the influence of the 1st of the oblateness of the Earth (J2 parameter). It computes the evolution of the orbital elements, especially the precession of the longitude of the Right Ascension of the Ascending Node (RAAN or \( \Omega \)) and the precession of the Argument of perigee (\( \omega \)).
+This project is a J2 Secular Orbital propagator. It will calculate the successive position and velocity vectors in ECI, taking into account the gravity of the Earth (2-body perturbation) and the influence of the 1st of the oblateness of the Earth (J2 parameter). It computes the evolution of the orbital elements, especially the precession of the longitude of the Right Ascension of the Ascending Node (RAAN or Ω) and the precession of the Argument of perigee (ω).
 
 ## Background
 The Earth is not a perfect sphere. Due to the centrifugal forces, the equatorial radius of the Earth is slightly bigger than its polar radius. This ununiformity causes a perturbation in the gravitational field that the 2-body solicitation does not take into account. To mitigate this deviation, the J2 parameter can be implemented in the propagation code. It is one in many coefficients that account for the oblateness of the Earth, and the most significant.
