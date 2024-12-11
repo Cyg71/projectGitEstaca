@@ -6,9 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Your Project'
-copyright = '2024, Your Name'
-author = 'Your Name'
+project = 'J2 Secular orbital propagation'
+copyright = '2024, Valentine LEGAT, Cyriaque GUILLOT'
+author = 'Valentine LEGAT, Cyriaque GUILLOT'
 release = '0.1'
 
 # -- General configuration ---------------------------------------------------
