@@ -31,6 +31,7 @@ The Earth is not a perfect sphere. Due to the centrifugal forces, the equatorial
     pdm install
     pip install -r requirements.txt
     cd src\projectgitestaca
+    python orbitalPropagation.py
 
 ## Contact
 Valentine LEGAT - Valentine.LEGAT@estaca.eu - ESTACA Paris-Saclay <br />
