@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>projectgitestaca.orbitalPropagation module &mdash; Your Project 0.1 documentation</title>
+  <title>projectgitestaca.orbitalPropagation module &mdash; J2 Secular orbital propagation 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -30,7 +30,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            Your Project
+            J2 Secular orbital propagation
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -51,7 +51,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Your Project</a>
+          <a href="../index.html">J2 Secular orbital propagation</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -78,12 +78,15 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> – rotation angle [rad]</p></li>
-<li><p><strong>u</strong> – rotation axis (0 = x, 1 = y, 2 = z)</p></li>
+<li><p><strong>a</strong> – rotation angle [rad], float</p></li>
+<li><p><strong>u</strong> – rotation axis (0 = x, 1 = y, 2 = z), int</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>3x3 matrix NDArray</p>
+<dd class="field-even"><p>3x3 matrix, NDArray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rot</p>
 </dd>
 </dl>
 </dd></dl>
@@ -94,33 +97,35 @@
 <dd><p>Calculates the instantaneous acceleration and jerk vectors</p>
 <blockquote>
 <div><p>Args:
-pos: array 3x1 Position vector
-vel: array 3x1 Velocity vector</p>
+pos: ECI position vector, NDArray 3x1
+vel: ECI velocity vector, NDArray 3x1</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Acceleration vector 3x1 (m/s2) &amp; jerk vector 3x1 first time deritative of acceleration (m/s3), NDArray</p>
+<dd class="field-odd"><p>ECI acceleration vector 3x1 (m/s2), NDArray
+ECI jerk vector 3x1 first time deritative of acceleration (m/s3), NDArray</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="projectgitestaca.orbitalPropagation.kepler2state">
-<span class="sig-prename descclassname"><span class="pre">projectgitestaca.orbitalPropagation.</span></span><span class="sig-name descname"><span class="pre">kepler2state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/projectgitestaca/orbitalPropagation.html#kepler2state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projectgitestaca.orbitalPropagation.kepler2state" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">projectgitestaca.orbitalPropagation.</span></span><span class="sig-name descname"><span class="pre">kepler2state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/projectgitestaca/orbitalPropagation.html#kepler2state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projectgitestaca.orbitalPropagation.kepler2state" title="Link to this definition"></a></dt>
 <dd><p>Converts the Keplerian elements into state vectors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> – semi major axis [m], defined as a float</p></li>
-<li><p><strong>ecc</strong> – eccentricity (=distance between focal point / half major axis), defined as a float</p></li>
-<li><p><strong>i</strong> – inclination of the orbit [rad], defined as a float</p></li>
-<li><p><strong>Omega</strong> – longitude of the right ascension of the ascending node [rad], defined as a float</p></li>
-<li><p><strong>omega</strong> – argument of perigee [rad], defined as a float</p></li>
-<li><p><strong>nu</strong> – angle between the direction of the periapsis and the current position of an object [rad], defined as a float</p></li>
+<li><p><strong>a</strong> – semi major axis [m], float</p></li>
+<li><p><strong>ecc</strong> – eccentricity (=distance between focal point / half major axis), float</p></li>
+<li><p><strong>i</strong> – inclination of the orbit [rad], float</p></li>
+<li><p><strong>Omega</strong> – longitude of the right ascension of the ascending node [rad], float</p></li>
+<li><p><strong>omega</strong> – argument of perigee [rad], float</p></li>
+<li><p><strong>nu</strong> – angle between the direction of the periapsis and the current position of an object [rad], float</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>position vector 3x1 &amp; rdot: velocity vector 3x1, NDArray</p>
+<dd class="field-even"><p>ECI position vector 3x1, NDArray
+rdot: ECI velocity vector 3x1, NDArray</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>r</p>
@@ -131,13 +136,13 @@ vel: array 3x1 Velocity vector</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="projectgitestaca.orbitalPropagation.radius">
 <span class="sig-prename descclassname"><span class="pre">projectgitestaca.orbitalPropagation.</span></span><span class="sig-name descname"><span class="pre">radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/projectgitestaca/orbitalPropagation.html#radius"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projectgitestaca.orbitalPropagation.radius" title="Link to this definition"></a></dt>
-<dd><p>Instantaneous radius of the orbit</p>
+<dd><p>Instantaneous radius of the orbit, given for the current Keplerian elements a, ecc and nu</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> – semi major axis [m], defined as a float</p></li>
-<li><p><strong>ecc</strong> – eccentricity (=distance between focal point / half major axis), defined as a float</p></li>
-<li><p><strong>nu</strong> – angle between the direction of the periapsis and the current position of an object [rad], defined as a float</p></li>
+<li><p><strong>a</strong> – semi major axis [m], float</p></li>
+<li><p><strong>ecc</strong> – eccentricity (distance between focal point / half major axis), float</p></li>
+<li><p><strong>nu</strong> – angle between the direction of the periapsis and the current position of an object [rad], float</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -156,7 +161,7 @@ vel: array 3x1 Velocity vector</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Your Name.</p>
+    <p>&#169; Copyright 2024, Valentine LEGAT, Cyriaque GUILLOT.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
